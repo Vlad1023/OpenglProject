@@ -21,6 +21,11 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Interfaces.h" />
+    <ClInclude Include="Primitives.h" />
+    <ClInclude Include="Scene.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{21A646D9-B997-4224-9DB7-587486A4E77E}</ProjectGuid>
