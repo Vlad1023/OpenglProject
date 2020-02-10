@@ -1,10 +1,17 @@
 #pragma once
+#include <string>
+#include <iostream>
+using namespace std;
 class Component {
-private:
-	GLfloat xCol, yCol, sizeX, sizeY;
+protected:
+	string name;
 public:
-	virtual bool CheckCollision(Component& one, Component& two) = 0;
-	virtual void IDraw() = 0;
-	virtual void IDrawShape() = 0;
-	virtual void IChangeableColor() = 0;
+	virtual bool ICheckCollision(Component& another) { return false; }
+	virtual void IDraw() { return; }
+	virtual void IDrawShape() { return; }
+	virtual void IChangeableColor() { return; }
+	string IgetName()
+	{
+		return name;
+	}
 };

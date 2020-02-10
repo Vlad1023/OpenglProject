@@ -1,33 +1,34 @@
 #include <GLFW/glfw3.h>
 #include "Scene.h"
+#include "Primitives.h"
+#include "Composite.h"
+
 #include <math.h>
 #include <iostream>
 #include <vector>
-#include "Primitives.h"
-
+#include <memory>
 
 int main(void)
 { 
-    Circle cir;
+
+
+    
+    Scene::get_instance();
     if (!glfwInit())
     {
         return -1;
     }
     glfwMakeContextCurrent(Scene::get_instance());
-    float vertices[] =
-    {
-        0, 0.5, 0.0, // top corner
-        -0.5, -0.5, 0.0, // bottom left corner
-        0.5, -0.5, 0.0 // bottom right corner
-    };
+
+    
     while (!glfwWindowShouldClose(Scene::get_instance()))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+      
+      
        
 
         glfwSwapBuffers(Scene::get_instance());
-
-        // Poll for and process events
         glfwPollEvents();
     }
 
