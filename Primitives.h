@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 # define M_PI 3.14159265358979323846
-class Circle :  public Component {
+class Circle :  public IPrimitive {
 public:
     void IDraw() override
     {
@@ -38,7 +38,7 @@ public:
         glDrawArrays(GL_TRIANGLE_FAN, 0, numberOfVertices);
         glDisableClientState(GL_VERTEX_ARRAY);
     }
-    void Initialize(){
+    void IInitialize() override {
         cout << "Input circle name" << endl;
         cin >> this->name;
         cout << "Input circle x" << endl;
@@ -49,10 +49,13 @@ public:
         cin >> this->radius;
     }
     Circle() {
-        Initialize();
+        IInitialize();
     }
-    bool ICheckCollision(Component& another) override {
+    bool ICheckCollision(IShape& another) override {
         return false;
+    }
+    void IClone() override {
+
     }
     void IDrawShape() override {
 
@@ -67,17 +70,19 @@ private:
 
 
 
-class Rectangle : public Component {
+class Rectangle : public IPrimitive {
 public:
-    void IDraw()
+    void windowOut() {
+       
+    }
+    void IDraw() override
     {
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(2, GL_FLOAT, 0, vertices);
         glDrawArrays(GL_QUADS, 0, 4);
         glDisableClientState(GL_VERTEX_ARRAY);
-
     }
-    void Initialize() {
+    void IInitialize() override {      
         cout << "Input rectangle name" << endl;
         cin >> this->name;
         cout << "Input rectangle top right" << endl;
@@ -89,17 +94,16 @@ public:
         cout << "Input rectangle bottom right" << endl;
         cin >> vertices[6] >> vertices[7];
     }
-    Rectangle(Component &another) {
-        Initialize();
+    Rectangle() {
+        IInitialize();
     }
-    bool ICheckCollision(Component& another) {
+    bool ICheckCollision(IShape& another) override {
         return false;
     }
-    
-    void IDrawShape() {
+    void IClone() override {
 
     }
-    void IChangeableColor() {
+    void IDrawShape() override {
 
     }
 private:

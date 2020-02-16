@@ -2,32 +2,42 @@
 #include "Interfaces.h"
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
-class Composite:  public Component {
+class Composite:  public IShape {
 private:
-	vector<Component> childs;
+	vector<IShape*> childs;
 
 public:
-	void addChild(const Component &toAdd) {
+	void addChild(IShape* toAdd) {
 		childs.push_back(toAdd);
 	}
-	Component& findByName(string name) {
-		for (Component& n : childs) {
-
-
-			return n;
-		}
-	}
 	void IDraw() override {
+
+		for (IShape* n : childs) {
+			n->IDraw();
+		}
 		
 	}
-	bool ICheckCollision(Component& another) override {
+	void IInitialize() override {
+	}
+	void IClone() override {
+	}
+	bool ICheckCollision(IShape& another) override {
 		return false;
 	}
 	void IDrawShape() override {
 		
 	}
 	void IChangeableColor() override {
-		
+		for (IShape* n : childs) {
+			n->IChangeableColor();
+		}
+	}
+
+	~Composite() override {
+		for (IShape* n : childs) {
+			delete n;
+		}
 	}
 };
