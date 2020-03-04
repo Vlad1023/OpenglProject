@@ -4,29 +4,51 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-class Composite:  public IShape {
+class Composite :  public IShape {
 private:
 	vector<IShape*> childs;
-
 public:
-	void addChild(IShape* toAdd) {
-		childs.push_back(toAdd);
+	void addChild(IShape* to_Add) {
+		childs.push_back(to_Add);
 	}
 	void IDraw() override {
-
 		for (IShape* n : childs) {
 			n->IDraw();
 		}
-		
 	}
-	void IInitialize() override {
+	void moveLeft() override
+	{
+		for (IShape* n : childs) {
+			n->moveLeft();
+		}
 	}
-	void IClone() override {
+	void moveRight() override
+	{
+		for (IShape* n : childs) {
+			n->moveRight();
+		}
+	}
+	void moveDown() override
+	{
+		for (IShape* n : childs) {
+			n->moveDown();
+		}
+	}
+	void moveUp() override
+	{
+		for (IShape* n : childs) {
+			n->moveUp();
+		}
+	}
+	void IInitialize() override
+	{
+		cout << "Input name of composite" << endl;
+		cin >> name;
 	}
 	bool ICheckCollision(IShape& another) override {
 		return false;
 	}
-	void IDrawShape() override {
+	void IDrawTail() override {
 		
 	}
 	void IChangeableColor() override {
@@ -34,10 +56,10 @@ public:
 			n->IChangeableColor();
 		}
 	}
-
 	~Composite() override {
 		for (IShape* n : childs) {
+			if (!n)
 			delete n;
 		}
-	}
+	}	
 };

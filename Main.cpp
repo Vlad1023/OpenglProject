@@ -2,20 +2,22 @@
 #include "Scene.h"
 #include "Primitives.h"
 #include "Composite.h"
-#include <math.h>
 #include <iostream>
 #include <vector>
 #include <memory>
+#include "Controller.h"
 using namespace std;
 int main(void)
 { 
-    Composite* com = new Composite();
-    com->addChild(new Circle());
+    unique_ptr<Composite> com(new Composite);
+    com->addChild(new Rectangle());
     if (!glfwInit())
     {
         return -1;
     }
-    glfwMakeContextCurrent(Scene::get_instance());    
+    glfwMakeContextCurrent(Scene::get_instance());
+    glfwSetKeyCallback(Scene::get_instance(), Controller::keyCallback);
+    Controller::setCurControlled(*com);
     while (!glfwWindowShouldClose(Scene::get_instance()))
     {
         glClear(GL_COLOR_BUFFER_BIT);
@@ -24,6 +26,5 @@ int main(void)
         glfwPollEvents();
     }
     glfwTerminate();
-    delete com;
     return 0;
 }
