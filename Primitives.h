@@ -13,8 +13,6 @@ public:
         yTail = y;
         if (ifDrawTail)
         IDrawTail();
-        x += 0.01;
-        y += 0.01;
         int numberOfVertices = 202;
         GLfloat twicePi = 2.0f * M_PI;
 
@@ -98,6 +96,29 @@ public:
             glVertexPointer(3, GL_FLOAT, 0, allCircleVertices);
             glDrawArrays(GL_TRIANGLE_FAN, 0, numberOfVertices);
             glDisableClientState(GL_VERTEX_ARRAY);
+    }
+    void moveLeft() override
+    {
+        
+            x -= SPEED;
+
+    }
+    void moveRight() override
+    {
+
+           x += SPEED;
+
+    }
+    void moveDown() override
+    {
+           y -= SPEED;
+
+    }
+    void moveUp() override
+    {
+       
+            y += SPEED;
+        
     }
     void OutOfWindow() override
     {

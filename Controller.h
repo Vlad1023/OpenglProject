@@ -1,41 +1,48 @@
 #pragma once
 #include <GLFW/glfw3.h>
-#include "Scene.h"
-#include "Primitives.h"
-#include "Composite.h"
-#include <iostream>
-#include <vector>
-#include <memory>
-#include "Controller.h"
+#include "Container.h"
 class Controller
 {
 private:
-    static Composite controlled;
+    static IShape* controlled;
 public:
-    static void setCurControlled(Composite& base)
+    static void setControlled(IShape* base)
+    {
+        controlled=base;
+    }
+	static IShape* getControlled()
+    {
+        return controlled;
+    }
+	static void initControlled(IShape* base)
     {
         controlled = base;
+        Container::Insert(base);
+        Controller::setControlled(controlled);
+    }
+    static void addChildToControlled(IShape* toAdd)
+    {
+        controlled->addChild(toAdd);
     }
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        std::cout << key << std::endl;
+        IShape& temp = *controlled;
         if (key == GLFW_KEY_W)
-        {
-            controlled.moveUp();
+        {    
+           temp.moveUp();
         }
         if (key == GLFW_KEY_S)
         {
-            controlled.moveDown();
+            temp.moveDown();
         }
         if (key == GLFW_KEY_A)
         {
-            controlled.moveLeft();
+            temp.moveLeft();
         }
         if (key == GLFW_KEY_D)
         {
-            controlled.moveRight();
+            temp.moveRight();
         }
-
     }
 };
-Composite Controller::controlled;
+IShape* Controller::controlled;

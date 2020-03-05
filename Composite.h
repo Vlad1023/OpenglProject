@@ -8,7 +8,7 @@ class Composite :  public IShape {
 private:
 	vector<IShape*> childs;
 public:
-	void addChild(IShape* to_Add) {
+	void addChild(IShape* to_Add) override{
 		childs.push_back(to_Add);
 	}
 	void IDraw() override {
@@ -39,6 +39,10 @@ public:
 		for (IShape* n : childs) {
 			n->moveUp();
 		}
+	}
+	Composite()
+	{
+		IInitialize();
 	}
 	void IInitialize() override
 	{

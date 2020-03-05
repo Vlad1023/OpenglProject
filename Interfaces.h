@@ -13,6 +13,7 @@ public:
 	virtual void moveRight() = 0;
 	virtual void moveUp() = 0;
 	virtual void moveDown() = 0;
+	virtual void addChild(IShape* to_Add) = 0;
 	bool ifDrawTail = true;
 	string name;
 	virtual ~IShape() {};
@@ -27,6 +28,7 @@ public:
 			colorInfo[i] = float(rand()) / RAND_MAX;
 		}
 	}
+	void addChild(IShape* to_Add) override{}
 	IPrimitive()
 	{
 		IChangeableColor();
