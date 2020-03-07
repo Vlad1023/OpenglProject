@@ -15,13 +15,11 @@ int main(void)
     glfwMakeContextCurrent(Scene::get_instance());
     glfwSetKeyCallback(Scene::get_instance(), Controller::keyCallback);
     Controller::initControlled(new Composite());
-    Controller::addChildToControlled(new Rectangle());
-    Controller::addChildToControlled(new Circle());
-    Container::Insert(new Circle());
+    Controller::displayMenu();
     while (!glfwWindowShouldClose(Scene::get_instance()))
     {
         glClear(GL_COLOR_BUFFER_BIT);;
-        Container::manEvs();
+        Controller::Process();
         glfwSwapBuffers(Scene::get_instance());
         glfwPollEvents();
     }

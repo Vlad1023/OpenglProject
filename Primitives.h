@@ -9,8 +9,6 @@ class Circle :  public IPrimitive {
 public:
     void IDraw() override
     {
-        xTail = x;
-        yTail = y;
         if (ifDrawTail)
         IDrawTail();
         int numberOfVertices = 202;
@@ -56,11 +54,30 @@ public:
         cout << "Input radius lenght" << endl;
         cin >> this->radius;
     }
-    Circle() {
-        IInitialize();
+    Circle(string type) {
+        if (type == "fast")
+            QuickInit();
+        else
+            IInitialize();
+    }
+	Circle(float x, float y, float radius)
+    {
+        this->x = x;
+        this->y = y;
+        this->radius = radius;
     }
     bool ICheckCollision(IShape& another) override {
         return false;
+    }
+	void QuickInit() override
+    {
+        /*
+        cout << "Input circle name" << endl;
+        cin >> this->name;
+        */
+        name = "standart";
+        x = y = 0;
+        radius = 0.05;
     }
     void IDrawTail() override {
             int numberOfVertices = 202;
@@ -97,28 +114,39 @@ public:
             glDrawArrays(GL_TRIANGLE_FAN, 0, numberOfVertices);
             glDisableClientState(GL_VERTEX_ARRAY);
     }
+	void updateTail()
+    {
+        xTail = x;
+        yTail = y;
+    }
     void moveLeft() override
     {
-        
-            x -= SPEED;
-
+        updateTail();
+        x -= SPEED;
+        xTail += SPEED;
     }
     void moveRight() override
     {
 
+        updateTail();
            x += SPEED;
+           xTail -= SPEED;
 
     }
     void moveDown() override
     {
-           y -= SPEED;
+
+        updateTail();
+        y -= SPEED;
+         yTail += SPEED;
 
     }
     void moveUp() override
     {
-       
-            y += SPEED;
-        
+
+        updateTail();
+         y += SPEED;
+         yTail -= SPEED;
     }
     void OutOfWindow() override
     {
@@ -126,6 +154,10 @@ public:
             x = -x;
             y = -y;
         }
+    }
+	IShape* IClone() override
+    {
+        return new Circle(x,y,radius);
     }
 private:
     GLfloat x, y, radius;
@@ -139,11 +171,7 @@ class Rectangle : public IPrimitive {
 public:
     void IDraw() override
     {
-        for (int i = 0; i < 8; i++)
-        {
-            float tmp = vertices[i];
-            tail[i] = tmp;
-        }
+        
     	if (ifDrawTail)
         IDrawTail();
         glColor3f(colorInfo[0], colorInfo[1], colorInfo[2]);
@@ -153,36 +181,52 @@ public:
         glDisableClientState(GL_VERTEX_ARRAY);
         OutOfWindow();
     }
+	void updateTail()
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            float tmp = vertices[i];
+            tail[i] = tmp;
+        }
+    }
 	void moveLeft() override
     {
+        updateTail();
         int j = 0;
         for (int i = 0; i <= 3; i++, j += 2)
         {
             vertices[j] -= SPEED;
+            tail[j] += SPEED;
         }
     }
 	void moveRight() override
     {
+        updateTail();
         int j = 0;
         for (int i = 0; i <= 3; i++, j += 2)
         {
             vertices[j] += SPEED;
+            tail[j] -= SPEED;
         }
     }
 	void moveDown() override
     {
+        updateTail();
         int j = 1;
         for (int i = 0; i <= 3; i++, j += 2)
         {
             vertices[j] -= SPEED;
+            tail[j] += SPEED;
         }
     }
 	void moveUp() override
     {
+        updateTail();
         int j = 1;
         for (int i = 0; i <= 3; i++,j+=2)
         {
             vertices[j] += SPEED;
+            tail[j] -= SPEED;
         }
     }
     void IInitialize() override {
@@ -197,8 +241,32 @@ public:
         cout << "Input rectangle bottom right" << endl;
         cin >> vertices[6] >> vertices[7];
     }
-    Rectangle() {
-        IInitialize();
+	void QuickInit() override
+    {
+    	/*
+        cout << "Input rectangle name" << endl;
+        cin >> this->name;
+        */
+        name = "standart";
+        vertices[0] = vertices[1] = 0.1;
+        vertices[2] = -0.1;
+        vertices[3] = 0.1;
+        vertices[4] = vertices[5] = -0.1;
+        vertices[6] = 0.1;
+        vertices[7] = -0.1;
+    }
+    Rectangle(string type) {
+        if (type == "fast")
+            QuickInit();
+        else
+            IInitialize();
+    }
+	Rectangle(float vertices[8])
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            this->vertices[i] = vertices[i];
+        }
     }
 	void OutOfWindow() override
     {
@@ -223,11 +291,15 @@ public:
     void IDrawTail() override {
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glColor4f(colorInfo[0], colorInfo[1], colorInfo[2], 0.5);
+            glColor4f(colorInfo[0], colorInfo[1], colorInfo[2], 0.1);
             glEnableClientState(GL_VERTEX_ARRAY);
             glVertexPointer(2, GL_FLOAT, 0, tail);
             glDrawArrays(GL_QUADS, 0, 4);
             glDisableClientState(GL_VERTEX_ARRAY);
+    }
+    IShape* IClone() override
+    {
+        return new Rectangle(vertices);
     }
 private:
     float vertices[8];

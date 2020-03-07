@@ -44,25 +44,39 @@ public:
 	{
 		IInitialize();
 	}
+	void changeTail() override
+	{
+		for (IShape* n : childs) {
+			n->changeTail();
+		}
+		
+	}
 	void IInitialize() override
 	{
+		/*
 		cout << "Input name of composite" << endl;
 		cin >> name;
+		*/
+	name = "standart";
 	}
 	bool ICheckCollision(IShape& another) override {
 		return false;
-	}
-	void IDrawTail() override {
-		
 	}
 	void IChangeableColor() override {
 		for (IShape* n : childs) {
 			n->IChangeableColor();
 		}
 	}
+	IShape* IClone() override
+	{
+		Composite* clone = new Composite();
+		for (IShape* n : childs) {
+			clone->addChild(n->IClone());
+		}
+		return clone;
+	}
 	~Composite() override {
 		for (IShape* n : childs) {
-			if (!n)
 			delete n;
 		}
 	}	

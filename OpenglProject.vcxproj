@@ -23,7 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Composite.h" />
-    <ClInclude Include="Container.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Primitives.h" />
