@@ -25,6 +25,7 @@
     <ClInclude Include="Composite.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Interfaces.h" />
+    <ClInclude Include="Memento.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="Scene.h" />
   </ItemGroup>
