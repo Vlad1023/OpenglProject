@@ -2,6 +2,7 @@
 #include "Interfaces.h"
 #include <iostream>
 #include <vector>
+#include <sstream>
 using namespace std;
 # define M_PI 3.14159265358979323846
 # define SPEED 0.01
@@ -75,7 +76,7 @@ public:
         cout << "Input circle name" << endl;
         cin >> this->name;
         */
-        name = "standart";
+        name = "Circle";
         x = y = 0;
         radius = 0.05;
     }
@@ -158,6 +159,12 @@ public:
 	IShape* IClone() override
     {
         return new Circle(x,y,radius);
+    }
+	string returnToFile() override
+    {
+        ostringstream oss;
+        oss << "Circle" << " " << x << " " << y << " " << radius;
+        return oss.str();
     }
 private:
     GLfloat x, y, radius;
@@ -247,7 +254,7 @@ public:
         cout << "Input rectangle name" << endl;
         cin >> this->name;
         */
-        name = "standart";
+        name = "Rectangle";
         vertices[0] = vertices[1] = 0.1;
         vertices[2] = -0.1;
         vertices[3] = 0.1;
@@ -300,6 +307,12 @@ public:
     IShape* IClone() override
     {
         return new Rectangle(vertices);
+    }
+    string returnToFile() override
+    {
+        ostringstream oss;
+        oss << "Rectangle" << " " << vertices[0] << " " << vertices[1] << " " << vertices[2] << " " << vertices[3] << " " << vertices[4] << " " << vertices[5] << " " << vertices[6] << " " << vertices[7];
+        return oss.str();
     }
 private:
     float vertices[8];

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include  <vector>
+#include "Memento.h"
 class Container
 {
 private:
@@ -100,6 +101,8 @@ public:
         cout << "Press 4 to add Shape to scene" << endl;
         cout << "Press 5 to change tail" << endl;
         cout << "Press 6 to group objects" << endl;
+        cout << "Press 7 to save state" << endl;
+        cout << "Press 8 to load state" << endl;
     }
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
@@ -144,6 +147,14 @@ public:
             if (key == GLFW_KEY_6)
             {
                 Group();
+            }
+        	if(key == GLFW_KEY_7)
+        	{
+                ShapeMemento::saveState(cont.getControlled());
+        	}
+            if (key == GLFW_KEY_8)
+            {
+                ShapeMemento::loadState(cont.getControlled());
             }
         }
     }

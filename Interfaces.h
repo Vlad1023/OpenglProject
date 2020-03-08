@@ -8,6 +8,7 @@ public:
 	virtual IShape* IClone() = 0;
 	virtual void IInitialize() = 0;
 	virtual void IDraw() = 0;
+	virtual string returnToFile() = 0;
 	virtual void IChangeableColor() = 0;
 	virtual void moveLeft() = 0;
 	virtual void moveRight() = 0;

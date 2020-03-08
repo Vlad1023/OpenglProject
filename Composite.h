@@ -3,11 +3,11 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <sstream>
 using namespace std;
-class Composite :  public IShape {
-private:
-	vector<IShape*> childs;
+class Composite :  public IShape {	
 public:
+	vector<IShape*> childs;
 	void addChild(IShape* to_Add) override{
 		childs.push_back(to_Add);
 	}
@@ -57,7 +57,7 @@ public:
 		cout << "Input name of composite" << endl;
 		cin >> name;
 		*/
-	name = "standart";
+	name = "Composite";
 	}
 	bool ICheckCollision(IShape& another) override {
 		return false;
@@ -74,6 +74,18 @@ public:
 			clone->addChild(n->IClone());
 		}
 		return clone;
+	}
+	string returnToFile() override
+	{
+		ostringstream oss;
+		oss << "{";
+		for (IShape* n : childs) {
+			oss << "\n";
+			oss << n->returnToFile();
+		}
+		oss << "\n";
+		oss << "}";
+		return oss.str();
 	}
 	~Composite() override {
 		for (IShape* n : childs) {
