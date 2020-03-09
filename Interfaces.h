@@ -16,7 +16,8 @@ public:
 	virtual void moveDown() = 0;
 	virtual void changeTail() = 0;
 	virtual void addChild(IShape* to_Add) = 0;
-	
+	virtual void setChild(int index, IShape* toAdd) {}
+	virtual IShape* operator[] (int index) { return this; }
 	string name;
 	virtual ~IShape() {};
 };

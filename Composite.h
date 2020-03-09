@@ -11,6 +11,14 @@ public:
 	void addChild(IShape* to_Add) override{
 		childs.push_back(to_Add);
 	}
+	void setChild(int index, IShape* toAdd) override
+	{
+		childs[index] = toAdd;
+	}
+	IShape* operator[] (int index) override
+	{
+		return childs.at(index);
+	}
 	void IDraw() override {
 		for (IShape* n : childs) {
 			n->IDraw();

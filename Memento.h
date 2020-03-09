@@ -1,11 +1,12 @@
 #pragma once
-#include <iostream>
 #include <fstream>
+#include <string>
 #include "Interfaces.h"
-using namespace std;
+#include <sstream>
 class ShapeMemento
 {
- static ifstream in;
+private:
+	static string current;
 public:
 	static void saveState(IShape& toSave)
 	{
@@ -14,29 +15,57 @@ public:
 		out << toSave.returnToFile();
 	}
 	
-	static void loadState(Composite& toLoad)
+	static void loadState(IShape& toLoad)
 	{
+		fstream in;
 		in.open("save.txt");
-		string cur;
+		getline(in, current);
+		loadStateHelper(toLoad, in);
+		in.close();
 	}
 	static void loadStateHelper(IShape& toLoad,fstream& in)
 	{
-		string current;
-		int chdCount;
+		int chdCount = 0;
 		getline(in, current);
 		while(current != "}")
 		{
 			if(current == "{")
-			{
-				vector<IShape*>::iterator it;
-				int i = 0;
-				for (it = toLoad.childs.begin(); i < chdCount ; it++)
-				{
-					i++;
-				}
-				loadStateHelper(&it,in);
+			{			
+				loadStateHelper(*toLoad.operator[](chdCount),in);
 			}
-			chdCount++;
+			std::vector<string> ref;
+			std::istringstream ss(current);
+			string tmp;
+			while (getline(ss, tmp, ' '))
+			{
+				ref.push_back(tmp.c_str());
+			}
+			if(ref.at(0) == "Circle")
+			{
+				loadCircle(toLoad, chdCount ,ref);
+			}
+			else if (ref.at(0) == "Rectangle")
+			{
+				loadRectangle(toLoad, chdCount, ref);
+			}
+			getline(in, current);
+			chdCount++;	
 		}
 	}
+	static void loadCircle(IShape& toInit, int index, std::vector<string> ref)
+	{
+		auto* circ = new Circle(stof(ref.at(1)),stof(ref.at(2)),stof(ref.at(3)));
+		toInit.setChild(index, circ);	
+	}
+	static void loadRectangle(IShape& toInit, int index, std::vector<string> ref)
+	{
+		float vertices[8];
+		for (int i = 0; i < 8; i++)
+		{
+			vertices[i] = stof(ref.at(i+1));
+		}
+		auto* circ = new Rectangle(vertices);
+		toInit.setChild(index, circ);
+	}
 };
+string ShapeMemento::current;

@@ -67,6 +67,12 @@ public:
         this->y = y;
         this->radius = radius;
     }
+	Circle(Circle* copy)
+    {
+        x = copy->x;
+        y = copy->x;
+        radius = copy->radius;
+    }
     bool ICheckCollision(IShape& another) override {
         return false;
     }
