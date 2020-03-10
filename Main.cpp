@@ -21,6 +21,7 @@ int main(void)
     {
         glClear(GL_COLOR_BUFFER_BIT);;
         Controller::Process();
+        Controller::CheckCollision();
         glfwSwapBuffers(Scene::get_instance());
         glfwPollEvents();
     }

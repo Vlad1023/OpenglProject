@@ -11,9 +11,32 @@ public:
 	void addChild(IShape* to_Add) override{
 		childs.push_back(to_Add);
 	}
+	bool CheckCollision(IShape& ref) override
+	{
+		bool ifCollide = false;
+		for (IShape* n : childs) {
+			if (n->CheckCollision(ref)) {
+				ifCollide = true;
+				break;;
+			}
+		}
+		return ifCollide;
+	}
+	void sizeIncrease() override
+	{
+		for (IShape* n : childs) {
+			n->sizeIncrease();
+		}
+	}
 	void setChild(int index, IShape* toAdd) override
 	{
 		childs[index] = toAdd;
+	}
+	void IChangeableColor() override
+	{
+		for (IShape* n : childs) {
+			n->IChangeableColor();
+		}
 	}
 	IShape* operator[] (int index) override
 	{
@@ -66,14 +89,6 @@ public:
 		cin >> name;
 		*/
 	name = "Composite";
-	}
-	bool ICheckCollision(IShape& another) override {
-		return false;
-	}
-	void IChangeableColor() override {
-		for (IShape* n : childs) {
-			n->IChangeableColor();
-		}
 	}
 	IShape* IClone() override
 	{

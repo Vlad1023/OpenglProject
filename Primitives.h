@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <cmath>
 using namespace std;
 # define M_PI 3.14159265358979323846
 # define SPEED 0.01
@@ -14,7 +15,7 @@ public:
         IDrawTail();
         int numberOfVertices = 202;
         GLfloat twicePi = 2.0f * M_PI;
-
+        updateCollision();
         GLfloat circleVerticesX[202];
         GLfloat circleVerticesY[202];
         GLfloat circleVerticesZ[202];
@@ -55,6 +56,10 @@ public:
         cout << "Input radius lenght" << endl;
         cin >> this->radius;
     }
+	void sizeIncrease() override
+    {
+        radius *= 1.01;
+    }
     Circle(string type) {
         if (type == "fast")
             QuickInit();
@@ -73,8 +78,12 @@ public:
         y = copy->x;
         radius = copy->radius;
     }
-    bool ICheckCollision(IShape& another) override {
-        return false;
+	void updateCollision()
+    {
+        PosX = x-0.05;
+        PosY = y-0.05;
+        sizeX = radius;
+        sizeY = radius;
     }
 	void QuickInit() override
     {
@@ -131,14 +140,15 @@ public:
         updateTail();
         x -= SPEED;
         xTail += SPEED;
+        if (trajectoryMove)
+            y = sin(8 * x);
     }
     void moveRight() override
     {
-
         updateTail();
-           x += SPEED;
-           xTail -= SPEED;
-
+        x += SPEED;
+        xTail -= SPEED;
+        y = sin(8 * x);
     }
     void moveDown() override
     {
@@ -172,6 +182,14 @@ public:
         oss << "Circle" << " " << x << " " << y << " " << radius;
         return oss.str();
     }
+    bool CheckCollision(IShape& ref) override
+    {
+        bool collisionX = PosX + sizeX >= ref.PosX &&
+            ref.PosX + ref.sizeX >= PosX;
+        bool collisionY = PosY + sizeY >= ref.PosY &&
+            ref.PosY + ref.sizeY >= PosY;
+        return collisionX && collisionY;
+    }
 private:
     GLfloat x, y, radius;
     GLfloat xTail, yTail;
@@ -184,15 +202,24 @@ class Rectangle : public IPrimitive {
 public:
     void IDraw() override
     {
-        
     	if (ifDrawTail)
         IDrawTail();
+        updateCollision();
+        int j = 1;
         glColor3f(colorInfo[0], colorInfo[1], colorInfo[2]);
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(2, GL_FLOAT, 0, vertices);
         glDrawArrays(GL_QUADS, 0, 4);
         glDisableClientState(GL_VERTEX_ARRAY);
         OutOfWindow();
+
+    }
+    void sizeIncrease() override
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            vertices[i] *= 1.01;
+        }
     }
 	void updateTail()
     {
@@ -201,6 +228,14 @@ public:
             float tmp = vertices[i];
             tail[i] = tmp;
         }
+    }
+	bool CheckCollision(IShape& ref) override
+    {
+        bool collisionX = PosX + sizeX >= ref.PosX &&
+            ref.PosX + ref.sizeX >= PosX;
+        bool collisionY = PosY + sizeY >= ref.PosY &&
+            ref.PosY + ref.sizeY >= PosY;
+        return collisionX && collisionY;
     }
 	void moveLeft() override
     {
@@ -211,6 +246,16 @@ public:
             vertices[j] -= SPEED;
             tail[j] += SPEED;
         }
+        float sinRes = 0.01 * sin(10 * vertices[j]); 
+         j = 0;
+        if (trajectoryMove)
+        {
+            for (int i = 0; i <= 3; i++, j += 2)
+            {
+                vertices[j + 1] += sinRes;
+                cout << j << endl;
+            }
+        }
     }
 	void moveRight() override
     {
@@ -220,6 +265,15 @@ public:
         {
             vertices[j] += SPEED;
             tail[j] -= SPEED;
+        }
+        float sinRes = 0.01 * sin(10 * vertices[j]);
+        j = 0;
+        if (trajectoryMove)
+        {
+            for (int i = 0; i <= 3; i++, j += 2)
+            {
+                vertices[j + 1] += sinRes;
+            }
         }
     }
 	void moveDown() override
@@ -242,6 +296,13 @@ public:
             tail[j] -= SPEED;
         }
     }
+    void updateCollision()
+    {
+        PosX = vertices[2];
+        PosY = vertices[3];
+        sizeX = vertices[0] - vertices[2];
+        sizeY = vertices[1] - vertices[7];
+    }
     void IInitialize() override {
         cout << "Input rectangle name" << endl;
         cin >> this->name;
@@ -261,10 +322,12 @@ public:
         cin >> this->name;
         */
         name = "Rectangle";
-        vertices[0] = vertices[1] = 0.1;
+        vertices[0] = 0.1;
+        vertices[1] = 0.1;
         vertices[2] = -0.1;
         vertices[3] = 0.1;
-        vertices[4] = vertices[5] = -0.1;
+        vertices[4] = -0.1;
+        vertices[5] = -0.1;
         vertices[6] = 0.1;
         vertices[7] = -0.1;
     }
@@ -283,23 +346,21 @@ public:
     }
 	void OutOfWindow() override
     {
-       bool isOut = false;
+       bool isOut = true;
        for (int i = 0; i < 8; i++)
        {
-           if (abs(vertices[i]) > 1) {
-               isOut = true;
+           if (abs(vertices[i]) < 1) {
+               isOut = false;
            	break;
            }
        }
        if (isOut) {
            for (int i = 0; i < 8; i++)
            {
-               vertices[i] = -vertices[i];
+               float tmp = vertices[i];
+               vertices[i] = -tmp;
            }
        }
-    }
-    bool ICheckCollision(IShape& another) override {
-        return false;
     }
     void IDrawTail() override {
             glEnable(GL_BLEND);

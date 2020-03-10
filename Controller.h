@@ -34,6 +34,20 @@ public:
     {
         return *controlled;
     }
+	void checkCollision()
+     {
+        vector<unique_ptr<IShape>>::iterator it;
+        vector<unique_ptr<IShape>>::iterator itref;
+        itref = container.begin();
+        for (it = container.begin(); it != container.end(); it++)
+        {
+            if(it != itref && itref->get()->CheckCollision(*it->get()))
+            {
+                itref->get()->sizeIncrease();
+                it->get()->sizeIncrease();
+            }
+        }
+     }
     void initControlled(IShape* base)
     {
         controlled = base;
@@ -73,6 +87,10 @@ public:
     {
         cont.initControlled(base);
     }
+	static void CheckCollision()
+    {
+        cont.checkCollision();
+    }
 	static void changedControlled()
     {
         cont.changeControlller();
@@ -108,22 +126,6 @@ public:
     {
         IShape& temp = cont.getControlled();
         if (action == GLFW_RELEASE) {
-            if (key == GLFW_KEY_W)
-            {
-                temp.moveUp();
-            }
-            if (key == GLFW_KEY_S)
-            {
-                temp.moveDown();
-            }
-            if (key == GLFW_KEY_A)
-            {
-                temp.moveLeft();
-            }
-            if (key == GLFW_KEY_D)
-            {
-                temp.moveRight();
-            }
             if (key == GLFW_KEY_1)
             {
                 addChildToControlled(new Rectangle("fast"));
@@ -148,15 +150,34 @@ public:
             {
                 Group();
             }
-        	if(key == GLFW_KEY_7)
-        	{
+            if (key == GLFW_KEY_7)
+            {
                 ShapeMemento::saveState(cont.getControlled());
-        	}
+            }
             if (key == GLFW_KEY_8)
             {
                 ShapeMemento::loadState(cont.getControlled());
-            }
+            }         
         }
+    	if(action == GLFW_REPEAT)
+    	{
+            if (key == GLFW_KEY_W)
+            {
+                temp.moveUp();
+            }
+            if (key == GLFW_KEY_S)
+            {
+                temp.moveDown();
+            }
+            if (key == GLFW_KEY_A)
+            {
+                temp.moveLeft();
+            }
+            if (key == GLFW_KEY_D)
+            {
+                temp.moveRight();
+            }
+    	}
     }
 };
 Container Controller::cont;
