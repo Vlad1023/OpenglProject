@@ -54,7 +54,7 @@ public:
 	}
 	static void loadCircle(IShape& toInit, int index, std::vector<string> ref)
 	{
-		auto* circ = new Circle(stof(ref.at(1)),stof(ref.at(2)),stof(ref.at(3)));
+		auto* circ = new Circle(stof(ref.at(1)),stof(ref.at(2)),stof(ref.at(3)), stof(ref.at(4)), stof(ref.at(5)), stof(ref.at(6)), false);
 		toInit.setChild(index, circ);	
 	}
 	static void loadRectangle(IShape& toInit, int index, std::vector<string> ref)
@@ -64,7 +64,7 @@ public:
 		{
 			vertices[i] = stof(ref.at(i+1));
 		}
-		auto* circ = new Rectangle(vertices);
+		auto* circ = new Rectangle(vertices, stof(ref.at(9)), stof(ref.at(10)), stof(ref.at(11)), false);
 		toInit.setChild(index, circ);
 	}
 };

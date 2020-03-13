@@ -6,7 +6,7 @@
 #include <cmath>
 using namespace std;
 # define M_PI 3.14159265358979323846
-# define SPEED 0.01
+# define SPEED 0.05
 class Circle :  public IPrimitive {
 public:
     void IDraw() override
@@ -58,7 +58,10 @@ public:
     }
 	void sizeIncrease() override
     {
-        radius *= 1.01;
+        if (radius <= 0.2)
+            radius *= 1.01;
+        else
+            radius = 0.1;
     }
     Circle(string type) {
         if (type == "fast")
@@ -66,11 +69,20 @@ public:
         else
             IInitialize();
     }
-	Circle(float x, float y, float radius)
+	Circle(float x, float y, float radius, float r, float g, float b, bool isRandomColor )
     {
         this->x = x;
         this->y = y;
         this->radius = radius;
+    	if(isRandomColor)
+    	{
+            IChangeableColor();
+    	}
+        else {
+            colorInfo[0] = r;
+            colorInfo[1] = g;
+            colorInfo[2] = b;
+        }
     }
 	Circle(Circle* copy)
     {
@@ -168,19 +180,19 @@ public:
     }
     void OutOfWindow() override
     {
-        if (abs(x) >= 1 || abs(y) >= 1) { 
+        if (x >= 1 || x <= -1 || y >= 1 || y <= -1) {
             x = -x;
             y = -y;
         }
     }
 	IShape* IClone() override
     {
-        return new Circle(x,y,radius);
+        return new Circle(x,y,radius,colorInfo[0],colorInfo[1],colorInfo[2],true);
     }
 	string returnToFile() override
     {
         ostringstream oss;
-        oss << "Circle" << " " << x << " " << y << " " << radius;
+        oss << "Circle" << " " << x << " " << y << " " << radius << " " << colorInfo[0] << " " << colorInfo[1] << " " << colorInfo[2];
         return oss.str();
     }
     bool CheckCollision(IShape& ref) override
@@ -219,7 +231,10 @@ public:
     {
         for (int i = 0; i < 8; i++)
         {
-            vertices[i] *= 1.01;
+            if (sizeX <= 0.4 && sizeY <= 0.4)
+                vertices[i] *= 1.01;
+            else
+                vertices[i] *= 0.5;
         }
     }
 	void updateTail()
@@ -337,11 +352,20 @@ public:
         else
             IInitialize();
     }
-	Rectangle(float vertices[8])
+	Rectangle(float vertices[8], float r, float g, float b, bool israndColor)
     {
         for (int i = 0; i < 8; i++)
         {
             this->vertices[i] = vertices[i];
+        }
+    	if(israndColor)
+    	{
+            IChangeableColor();
+    	}
+        else {
+            colorInfo[0] = r;
+            colorInfo[1] = g;
+            colorInfo[2] = b;
         }
     }
 	void OutOfWindow() override
@@ -349,7 +373,7 @@ public:
        bool isOut = false;
        for (int i = 0; i < 8; i++)
        {
-           if (abs(vertices[i]) >= 1) {
+           if (vertices[i] >= 1 || vertices[i] <= -1) {
                isOut = true;
            	break;
            }
@@ -373,12 +397,12 @@ public:
     }
     IShape* IClone() override
     {
-        return new Rectangle(vertices);
+        return new Rectangle(vertices,colorInfo[0],colorInfo[1],colorInfo[2],true);
     }
     string returnToFile() override
     {
         ostringstream oss;
-        oss << "Rectangle" << " " << vertices[0] << " " << vertices[1] << " " << vertices[2] << " " << vertices[3] << " " << vertices[4] << " " << vertices[5] << " " << vertices[6] << " " << vertices[7];
+        oss << "Rectangle" << " " << vertices[0] << " " << vertices[1] << " " << vertices[2] << " " << vertices[3] << " " << vertices[4] << " " << vertices[5] << " " << vertices[6] << " " << vertices[7] << " " << colorInfo[0] << " " << colorInfo[1] << " " << colorInfo[2];
         return oss.str();
     }
 private:
