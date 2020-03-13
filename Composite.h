@@ -22,6 +22,11 @@ public:
 		}
 		return ifCollide;
 	}
+	void changeTrajectory() override {
+		for (IShape* n : childs) {
+			n->changeTrajectory();
+		}
+	}
 	void sizeIncrease() override
 	{
 		for (IShape* n : childs) {

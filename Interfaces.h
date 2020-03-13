@@ -17,7 +17,7 @@ public:
 	float PosX;
 	float PosY;
 	bool trajectoryMove = true;
-	void changeTrajectory() { trajectoryMove = !trajectoryMove; }
+	virtual void changeTrajectory() { trajectoryMove = !trajectoryMove; }
 	virtual void sizeIncrease() = 0;
 	virtual bool CheckCollision(IShape& ref) = 0;
 	virtual IShape* IClone() = 0;

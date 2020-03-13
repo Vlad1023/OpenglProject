@@ -111,6 +111,9 @@ public:
     {
         cont.groupShapes();
     }
+    static void changeMovement() {
+     cont.getControlled().changeTrajectory();
+    }
 	static void displayMenu()
     {
         cout << "Press 1 to add rectangle child" << endl;
@@ -157,7 +160,11 @@ public:
             if (key == GLFW_KEY_8)
             {
                 ShapeMemento::loadState(cont.getControlled());
-            }         
+            }
+            if (key == GLFW_KEY_9)
+            {
+                changeMovement();
+            }
         }
     	if(action == GLFW_REPEAT)
     	{

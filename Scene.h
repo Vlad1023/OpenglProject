@@ -1,8 +1,8 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
-#define SCREEN_WIDTH 1500
-#define SCREEN_HEIGHT 1500
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 800
 class Scene {
 public:
 	static GLFWwindow* get_instance()

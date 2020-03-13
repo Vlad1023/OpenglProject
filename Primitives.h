@@ -148,6 +148,7 @@ public:
         updateTail();
         x += SPEED;
         xTail -= SPEED;
+        if (trajectoryMove)
         y = sin(8 * x);
     }
     void moveDown() override
@@ -167,7 +168,7 @@ public:
     }
     void OutOfWindow() override
     {
-        if (abs(x) >= 1 && abs(y) >= 1) { 
+        if (abs(x) >= 1 || abs(y) >= 1) { 
             x = -x;
             y = -y;
         }
@@ -253,7 +254,6 @@ public:
             for (int i = 0; i <= 3; i++, j += 2)
             {
                 vertices[j + 1] += sinRes;
-                cout << j << endl;
             }
         }
     }
@@ -346,11 +346,11 @@ public:
     }
 	void OutOfWindow() override
     {
-       bool isOut = true;
+       bool isOut = false;
        for (int i = 0; i < 8; i++)
        {
-           if (abs(vertices[i]) < 1) {
-               isOut = false;
+           if (abs(vertices[i]) >= 1) {
+               isOut = true;
            	break;
            }
        }
